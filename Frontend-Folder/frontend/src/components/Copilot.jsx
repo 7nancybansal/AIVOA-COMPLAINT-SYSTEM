@@ -8,14 +8,13 @@ import {
   Upload,
   FileText,
   X,
-}
-
-from "lucide-react";
+} from "lucide-react";
 
 function Copilot({ onAnalysis }) {
   const dispatch = useDispatch();
+
   const [selectedFile, setSelectedFile] = useState(null);
-  const [analysis, setAnalysis] = useState(null);
+  const [analysis, setAnalysisLocal] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = async (event) => {
@@ -44,13 +43,13 @@ function Copilot({ onAnalysis }) {
 
       console.log("AI Analysis:", data);
 
-      setAnalysis(data.analysis);
+      setAnalysisLocal(data.analysis);
 
       dispatch(setAnalysis(data.analysis));
 
-       if (onAnalysis) {
+      if (onAnalysis) {
         onAnalysis(data.analysis);
-        }
+      }
     } catch (error) {
       console.error("Upload failed:", error);
       alert("Could not analyze complaint.");
@@ -61,7 +60,7 @@ function Copilot({ onAnalysis }) {
 
   const removeFile = () => {
     setSelectedFile(null);
-    setAnalysis(null);
+    setAnalysisLocal(null);
   };
 
   return (
@@ -88,10 +87,7 @@ function Copilot({ onAnalysis }) {
         </span>
 
       </div>
-
-
-      <div className="copilot-content">
-
+        <div className="copilot-content">
         <div className="upload-section">
 
           <h3>Complaint Source</h3>
@@ -126,6 +122,7 @@ function Copilot({ onAnalysis }) {
                 <FileText size={20} />
 
                 <div>
+
                   <strong>
                     {selectedFile.name}
                   </strong>
@@ -133,6 +130,7 @@ function Copilot({ onAnalysis }) {
                   <span>
                     {(selectedFile.size / 1024).toFixed(1)} KB
                   </span>
+
                 </div>
 
               </div>
@@ -142,10 +140,10 @@ function Copilot({ onAnalysis }) {
               </button>
 
             </div>
+
           )}
 
         </div>
-
 
         <div className="ai-welcome">
 
@@ -168,39 +166,47 @@ function Copilot({ onAnalysis }) {
 
         </div>
 
-
         <div className="copilot-section">
 
           <h3>AI Assessment</h3>
 
           <div className="assessment-item">
-            <span>Complaint completeness</span>
+
+            <span>
+              Complaint completeness
+            </span>
 
             <strong>
               {analysis?.completeness || "Pending"}
             </strong>
+
           </div>
 
-
           <div className="assessment-item">
-            <span>Risk classification</span>
+
+            <span>
+              Risk classification
+            </span>
 
             <strong>
               {analysis?.risk_level || "Pending"}
             </strong>
+
           </div>
 
-
           <div className="assessment-item">
-            <span>Complaint severity</span>
+
+            <span>
+              Complaint severity
+            </span>
 
             <strong>
               {analysis?.severity || "Pending"}
             </strong>
+
           </div>
 
         </div>
-
 
         {analysis && (
 
@@ -215,7 +221,6 @@ function Copilot({ onAnalysis }) {
           </div>
 
         )}
-
 
         <div className="copilot-section">
 
@@ -236,7 +241,6 @@ function Copilot({ onAnalysis }) {
         </div>
 
       </div>
-
 
       <div className="copilot-input">
 
